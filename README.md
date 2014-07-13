@@ -1,4 +1,4 @@
 Sapphire
 ========
 
-Like Ruby but blue
+Like Ruby, but blue
