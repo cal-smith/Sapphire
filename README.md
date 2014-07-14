@@ -18,6 +18,12 @@ Planned:
 - release on NPM
 - release for other commonjs/requirejs platforms
 
+##Building
+
+Clone the repo, hack the files you want and run either `ruby build.rb dev` or `ruby build.rb release`
+
+The dev options just aggregates the files, while release aggregates and minifies them.
+
 ##Docs
 
 ###Array + Object
