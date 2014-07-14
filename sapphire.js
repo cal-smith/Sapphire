@@ -94,8 +94,8 @@ Object.prototype.key = function(value){//returns the key for a given value
 	return Sapphire.o_findkv(this, value, false);
 };
 
-Object.prototype.value = function(value){//returns true if there exists a given value
-	return Sapphire.o_findkv(this, value, true);
+Object.prototype.val = function(val){//returns true if there exists a given value
+	return Sapphire.o_findkv(this, val, true);
 };
 
 /*
