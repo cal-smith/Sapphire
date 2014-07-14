@@ -1,6 +1,6 @@
-testo = {'a':'aa','b':'bb'};
-testo2 = {'a':'aa','b':'bb','c':['a','b','c']};
-testa = ['a','b','c','d'];
+var testo = {'a':'aa','b':'bb'};
+var testo2 = {'a':'aa','b':'bb','c':['a','b','c']};
+var testa = ['a','b','c','d'];
 
 Object.prototype.each = function(callback){//iterator for objects or arrays
 	if (Array.isArray(this) || this.toString() === "[object HTMLCollection]") {//HTMLCollection uses the same style methods as array
@@ -12,10 +12,10 @@ Object.prototype.each = function(callback){//iterator for objects or arrays
 			var k = Object.keys(this)[i];//key
 			var v = this[Object.keys(this)[i]];//value
 			callback(k, v);//calls the callback once for each key. first argument is the key, second argument is the value
-		};
+		}
 	}
 	return this;
-}
+};
 
 Object.defineProperty(Object.prototype, "last", {//returns the last value of an object/last element in an array
 	get: function(){
@@ -45,17 +45,17 @@ Object.defineProperty(Object.prototype, "first", {//returns the first value of a
 if (window) {
 	window.c = function(e){
 		return document.getElementsByClassName(e);
-	}
+	};
 
 	window.t = function(e){
 		return document.getElementsByTagName(e);
-	}
+	};
 
 	window.e = window.i = function(e){
 		return document.getElementById(e);
-	}
+	};
 
-	window.n = function(){
+	window.n = function(e){
 		return document.getElementsByName(e);
 	}
 }
