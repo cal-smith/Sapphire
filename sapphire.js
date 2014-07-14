@@ -1,6 +1,7 @@
 var testo = {'a':'aa','b':'bb'};
 var testo2 = {'a':'aa','b':'bb','c':['a','b','c']};
 var testa = ['a','b','c','d'];
+var Sapphire = {};//config object, and object for internal functions
 
 /*
 *
@@ -63,17 +64,6 @@ Object.prototype.contains = function(search){//checks if objects and arrays cont
 * Objects
 *
 */
-Object.prototype.key = function(value){//returns the key for a given value
-	for (var i = 0; i < Object.keys(this).length; i++) {
-		var k = Object.keys(this)[i];//key
-		var v = this[Object.keys(this)[i]];//value
-		if (v === value){
-			return k;
-		}
-	}
-	return false;
-};
-
 Object.defineProperty(Object.prototype, "values", {
 	get: function(){
 		var array = [];
@@ -85,15 +75,27 @@ Object.defineProperty(Object.prototype, "values", {
 	}
 });
 
-Object.prototype.value = function(value){//returns true if there exists a given value
-	for (var i = 0; i < Object.keys(this).length; i++) {
-		var k = Object.keys(this)[i];//key
-		var v = this[Object.keys(this)[i]];//value
+Sapphire.o_findkv = function(ctx, value, ret_true){//reduce duplication. takes a ctx(this) the value, and weather to return true or simply the value
+	for (var i = 0; i < Object.keys(ctx).length; i++) {
+		var k = Object.keys(ctx)[i];//key
+		var v = ctx[Object.keys(ctx)[i]];//value
 		if (v === value){
-			return true;
+			if (ret_true) {
+				return true;
+			} else{
+				return k;
+			}
 		}
 	}
 	return false;
+};
+
+Object.prototype.key = function(value){//returns the key for a given value
+	return Sapphire.o_findkv(this, value, false);
+};
+
+Object.prototype.value = function(value){//returns true if there exists a given value
+	return Sapphire.o_findkv(this, value, true);
 };
 
 /*
@@ -107,7 +109,7 @@ Array.prototype.value = function(value){//returns the position of a given value,
 	} else {
 		return false;
 	}
-}
+};
 
 //borrowing a little from backbone.js here. .on and .off are just so succinct.
 Object.prototype.on = function(type, callback, capture){
@@ -142,7 +144,7 @@ if (window) {
 window.sleep = function(callback, delay){//wraps setTimeout, and defaults to sleeping in seconds rather than miliseconds.
 	delay = delay * 1000;
 	return window.setTimeout(callback, delay);
-}
+};
 
 document.on("load", function(){
 	//innerHTML and innerText just go together. textContent is cool, but innerText is where it's at.
