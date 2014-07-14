@@ -25,19 +25,30 @@ Planned:
 ####.each()
 
 `obj.each(callback(k,v))`  
+
+Executes callback() once for each key in a object. First callback argument is the key and the second is the value.
+
 `array.each(callback(k))`
+
+Executes callback() once for each element in an array, the callback recives the element in its argument. 
 
 ####.last 
 
 `obj/array.last`
 
+Gets the last element from an array or object.
+
 ####.first
 
 `obj/array.first`
 
+Gets the first element from an array or object.
+
 ####.contains()
 
 `obj/array.contains("search")`
+
+Returns true if the search value is found in the array/obj. False if not.
 
 ###Object
 
@@ -45,19 +56,19 @@ Planned:
 
 `obj.key(val)`
 
-returns the key for a given value
+returns the key for a given value, or false.
 
 ####.val()
 
 `obj.val(val)`
 
-returns true if there exists a given value
+returns true if there exists a given value, or false.
 
 ####.values
 
 `obj.values`
 
-returns an array containing the objects values
+returns an array containing the objects values.
 
 ###Array
 
@@ -65,13 +76,13 @@ returns an array containing the objects values
 
 `array.val(val)`
 
-returns the position of a given value, or false
+returns the position of a given value, or false.
 
 ####.shuffle
 
 `array.shuffle`
 
-shuffles the array and returns the shuffled array
+shuffles the array and returns the shuffled array.
 
 ###Event
 
@@ -79,7 +90,7 @@ shuffles the array and returns the shuffled array
 
 `target.on(type, callback, [userCapture])`
 
-effectively a 1-1 mapping for addEventListener
+effectively a 1-1 mapping for addEventListener.
 
 ####.off()
 
@@ -91,7 +102,7 @@ effectively a 1-1 mapping for removeEventListener.
 
 ####.e()/.i(), .c(), .t(), .n()
 
-Various shorthand for common element selectors
+Various shorthand for common element selectors.
 
 `.e("element")/.i("element")`  
 Shorthand for getElementById. Returns a single element.
