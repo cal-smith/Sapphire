@@ -111,6 +111,18 @@ Array.prototype.value = function(value){//returns the position of a given value,
 	}
 };
 
+Object.defineProperty(Array.prototype, "shuffle", {//shuffles a given array
+	get: function(){
+		for (var i = 0; i < this.length; i++) {
+			var e = this[i];
+			this.splice(i, 1);
+			var rnd = Math.floor(Math.random() * this.length);
+			this.splice(rnd, 0, e);
+		}
+		return this;
+	}
+});
+
 //borrowing a little from backbone.js here. .on and .off are just so succinct.
 Object.prototype.on = function(type, callback, capture){
 	this.addEventListener(type, callback, capture);
