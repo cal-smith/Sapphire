@@ -57,7 +57,7 @@ if (window) {
 
 	window.n = function(e){
 		return document.getElementsByName(e);
-	}
+	};
 }
 
 Object.defineProperty(Node.prototype, "innerText", {
