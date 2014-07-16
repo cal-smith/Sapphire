@@ -13,10 +13,10 @@ Just drop sapphire.js in your document
 `<script type="text/javascript" src="sapphire.js"></script>`
 
 Planned:
-- Implement a build system
-- Automated Github releases
-- release on NPM
-- release for other commonjs/requirejs platforms
+- [x] Implement a build system
+- [ ] Automated Github releases
+- [ ] Release on NPM
+- [ ] Release for other commonjs/requirejs platforms
 
 ##Building
 
