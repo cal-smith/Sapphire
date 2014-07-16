@@ -36,3 +36,9 @@ Object.defineProperty(Object.prototype, "values", {//returns an array of the obj
 		return array;
 	}
 });
+
+Object.defineProperty(Object.prototype, "parse", { //wrapper for the standard JSON.parse
+	get: function(){
+		return JSON.parse(this);
+	}
+});
