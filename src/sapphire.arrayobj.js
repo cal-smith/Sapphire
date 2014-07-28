@@ -61,3 +61,27 @@ if(!Object.prototype.contains){
 		}
 	};
 }
+
+if (!Object.prototype.empty){
+	Object.defineProperty(Object.prototype, "empty", {//returns true if array/obj contains nothing
+		get: function(){
+			if (this.toString() === "[object Object]") {
+
+			} else{
+				if (this.length === 0) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
+	});
+}
+
+if (!Object.prototype.times){
+	Object.prototype.times = function(callback){//calls [callback] "num" times
+		for (var i = 0; i < this; i++) {
+			callback();	
+		}
+	};
+}

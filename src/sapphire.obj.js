@@ -50,3 +50,5 @@ if(!Object.prototype.parse){
 		}
 	});
 }
+
+//.merge([objects]) -> merges objects into the main object preffering the originals values when a conflict occurs

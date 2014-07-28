@@ -14,3 +14,9 @@ if(!Object.prototype.even){
 		}
 	});
 }
+
+//.odd -> returns true if odd
+
+//.next -> returns number++
+
+//.round -> basically Math.floor. rounds a decimal to a whole

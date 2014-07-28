@@ -34,6 +34,87 @@ if(!Array.prototype.shuffle){
 		}
 	});
 }
+
+//.delete(d) -> deletes all items equal to d and returns a new array
+if (!Array.prototype.delete){
+	Array.prototype.delete = function(d){
+		var newarray = this;
+		function check(){
+			if (newarray.indexOf(d) !== -1 ){
+				newarray = newarray.remove(newarray.indexOf(d));
+				check();
+			} else {
+				return newarray;
+			}
+		}
+	};
+}
+
+if(!Array.prototype.cycle){
+	Array.prototype.cycle = function(callback, times){//loops over the array either inifinitly or so many [times] calling calback each time
+		if (typeof times !== "undefined") {
+			for (var i = 0; i < times; i++) {
+				for (var k = 0; k < this.length; k++) {
+					return callback(this[k]);
+				}
+			}
+		} else {
+			while(true){
+				for (var i = 0; i < this.length; i++) {
+					return callback(this[i]);
+				}
+			}
+		}
+	};
+}
+
+//.compact -> removes any null/undefined values
+if (!Array.prototype.compact) {
+	Object.defineProperty(Array.prototype, "compact", {
+		get: function(){
+			for (var i = 0; i < this.length; i++) {
+				if (this[i] === null || typeof this[i] === "undefined" || this[i] === "undefined"){
+					this.remove(this[i])
+				}
+				return this;
+			}
+		}
+	});
+}
+
+if (!Array.prototype.joins) { //returns a string of all the elements in the array, optionally seperated by [seperator]
+	Object.prototype.joins = function(sep){
+		if (typeof sep !== "undefined") {
+			var string = "";
+			for (var i = 0; i < this.length; i++) {
+				i === this.length - 1 ? string += this[i] : string += this[i] + sep;
+			}
+			return string;
+		} else {
+			var string = "";
+			for (var i = 0; i < this.length; i++) {
+				string += this[i];
+			}
+			return string;
+		}
+	};
+}
+
+if (!Array.prototype.sample) {
+	Array.prototype.sample = function(n){//returns either a random element or [number] random elements in an array
+		if (typeof n !== "undefined") {
+			var res = [];
+			for (var i = 0; i < n; i++) {
+				var rnd = Math.random() * this.length | 0;
+				res.push(this[rnd]);
+			}
+			return res;
+		} else {
+			var rnd = Math.random() * this.length | 0;
+			return this[rnd];
+		}
+	};
+}
 /*
 *
 * Arrays + Objects
@@ -94,6 +175,30 @@ if(!Object.prototype.contains){
 			} else {
 				return false;
 			}
+		}
+	};
+}
+
+if (!Object.prototype.empty){
+	Object.defineProperty(Object.prototype, "empty", {//returns true if array/obj contains nothing
+		get: function(){
+			if (this.toString() === "[object Object]") {
+
+			} else{
+				if (this.length === 0) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
+	});
+}
+
+if (!Object.prototype.times){
+	Object.prototype.times = function(callback){//calls [callback] "num" times
+		for (var i = 0; i < this; i++) {
+			callback();	
 		}
 	};
 }
@@ -171,6 +276,12 @@ if(!Object.prototype.even){
 		}
 	});
 }
+
+//.odd -> returns true if odd
+
+//.next -> returns number++
+
+//.round -> basically Math.floor. rounds a decimal to a whole
 /*
 *
 * Objects
@@ -223,6 +334,8 @@ if(!Object.prototype.parse){
 		}
 	});
 }
+
+//.merge([objects]) -> merges objects into the main object preffering the originals values when a conflict occurs
 /*
 *
 * Strings 
@@ -233,3 +346,40 @@ if(!Object.prototype.match){
 		return str.match(this);
 	};
 }
+
+if (!String.prototype.lowercase) {
+	Object.defineProperty(String.prototype, "lowercase", {//converts all chacters to lowercase
+		get: function(){
+			return this.toLowerCase();
+		}
+	});
+}
+
+if (!String.prototype.uppercase) {
+	Object.defineProperty(String.prototype, "uppercase", {//converts all chacters to uppercase
+		get: function(){
+			return this.toUpperCase();
+		}
+	});
+}
+
+//.capitalize -> convertes the first character to upper case, and the remainder to lower case
+if (!String.prototype.capitalize) {
+	Object.defineProperty(String.prototype, "capitalize", {//converts all chacters to uppercase
+		get: function(){
+			var str = this.split("");
+			str[0] = str[0].toUpperCase();
+			str = str.joins();
+			return str;
+		}
+	});
+}
+//.swapcase -> converts uppercase to lowercase and lowercase to uppercase
+//if([A-Z]) str[i].toupper if([a-z])str[i].tolower
+
+//.each([callback])/.each_char([callback])? -> calls callback for every chacter
+
+//.each_line?
+
+//.contains
+
