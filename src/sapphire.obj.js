@@ -18,27 +18,35 @@ Sapphire.o_findkv = function(ctx, value, ret_true){//reduce duplication. takes a
 	return false;
 };
 
-Object.prototype.key = function(val){//returns the key for a given value
-	return Sapphire.o_findkv(this, val, false);
-};
+if(!Object.prototype.key){
+	Object.prototype.key = function(val){//returns the key for a given value
+		return Sapphire.o_findkv(this, val, false);
+	};
+}
 
-Object.prototype.val = function(val){//returns true if there exists a given value
-	return Sapphire.o_findkv(this, val, true);
-};
+if(!Object.prototype.val){
+	Object.prototype.val = function(val){//returns true if there exists a given value
+		return Sapphire.o_findkv(this, val, true);
+	};
+}
 
-Object.defineProperty(Object.prototype, "values", {//returns an array of the objects values
-	get: function(){
-		var array = [];
-		for (var i = 0; i < Object.keys(this).length; i++) {
-			var v = this[Object.keys(this)[i]];
-			array.push(v);
+if(!Object.prototype.values){
+	Object.defineProperty(Object.prototype, "values", {//returns an array of the objects values
+		get: function(){
+			var array = [];
+			for (var i = 0; i < Object.keys(this).length; i++) {
+				var v = this[Object.keys(this)[i]];
+				array.push(v);
+			}
+			return array;
 		}
-		return array;
-	}
-});
+	});
+}
 
-Object.defineProperty(Object.prototype, "parse", { //wrapper for the standard JSON.parse
-	get: function(){
-		return JSON.parse(this);
-	}
-});
+if(!Object.prototype.parse){
+	Object.defineProperty(Object.prototype, "parse", { //wrapper for the standard JSON.parse
+		get: function(){
+			return JSON.parse(this);
+		}
+	});
+}

@@ -14,6 +14,7 @@ def build_dev
 		File.unlink("sapphire.js")
 	end
 	Dir.glob("../src/*.[a-z][a-z]") do |file|
+		puts file
 		append = File.read(file)
 		File.open("sapphire.js", "a") do |handle|
 			handle.puts append
