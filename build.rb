@@ -24,7 +24,7 @@ end
 
 def build_release
 	build_dev
-	%x(uglifyjs sapphire.js -o ../sapphire.min.js)
+	%x(uglifyjs sapphire.js -m -c -o ../sapphire.min.js)
 end
 
 options = Hash.new

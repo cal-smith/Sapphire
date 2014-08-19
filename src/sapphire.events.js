@@ -3,17 +3,28 @@
 * Events
 *
 */
-	//borrowing a little from backbone.js here. .on and .off are just so succinct.
+
+//non-patching
+Sapphire.on = function(ctx, type, callback, capture){
+	ctx.addEventListener(type, callback, capture);
+	return ctx;
+}
+
+Sapphire.off = function(ctx, type, callback, capture){
+	ctx.removeEventListener(type, callback, capture);
+	return ctx;
+}
+
+//patching functions
+//borrowing a little from jquery/backbone here. .on and .off are just so succinct.
 if(!Object.prototype.on){
 	Object.prototype.on = function(type, callback, capture){
-		this.addEventListener(type, callback, capture);
-		return this;
+		return Sapphire.on(this, type, callback, capture);
 	};
 }
 
 if(!Object.prototype.off){
 	Object.prototype.off = function(type, callback, capture){
-		this.removeEventListener(type, callback, capture);
-		return this;
+		return Sapphire.off(this, type, callback, capture);
 	};
 }

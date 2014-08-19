@@ -6,31 +6,111 @@ github.com/hansolo669/Sapphire
 "use strict";
 
 var Sapphire = {};
+
+var S = Sapphire;
 /*
 *
 * Arrays
 *
 */
+
+//non-patching
+Sapphire.val = function(ctx){
+	if (ctx.indexOf(value) !== -1){
+		return ctx.indexOf(value);
+	} else {
+		return false;
+	}
+}
+
+Sapphire.shuffle = function(ctx){
+	for (var i = 0; i < ctx.length; i++) {
+		var e = ctx[i];
+		ctx.splice(i, 1);
+		var rnd = Math.random() * ctx.length | 0;
+		ctx.splice(rnd, 0, e);
+	}
+	return ctx;
+}
+
+Sapphire.delete = function(ctx, d){
+	var newarray = this;
+	function check(){
+		if (newarray.indexOf(d) !== -1 ){
+			newarray = newarray.remove(newarray.indexOf(d));
+			check();
+		} else {
+			return newarray;
+		}
+	}
+}
+
+Sapphire.cycle = function(ctx, times, callback){
+	if (typeof times !== "undefined") {
+		for (var i = 0; i < times; i++) {
+			for (var k = 0; k < ctx.length; k++) {
+				return callback(ctx[k]);
+			}
+		}
+	} else {
+		while(true){
+			for (var i = 0; i < ctx.length; i++) {
+				return callback(ctx[i]);
+			}
+		}
+	}
+}
+
+Sapphire.compact = function(ctx){
+	for (var i = 0; i < ctx.length; i++) {
+		if (ctx[i] === null || typeof ctx[i] === "undefined" || ctx[i] === "undefined"){
+			ctx.remove(ctx[i])
+		}
+		return ctx;
+	}
+}
+
+Sapphire.joins = function(ctx, sep){
+	if (typeof sep !== "undefined") {
+		var string = "";
+		for (var i = 0; i < ctx.length; i++) {
+			i === ctx.length - 1 ? string += ctx[i] : string += ctx[i] + sep;
+		}
+		return string;
+	} else {
+		var string = "";
+		for (var i = 0; i < ctx.length; i++) {
+			string += ctx[i];
+		}
+		return string;
+	}
+}
+
+Sapphire.sample = function(ctx, n){
+	if (typeof n !== "undefined") {
+		var res = [];
+		for (var i = 0; i < n; i++) {
+			var rnd = Math.random() * ctx.length | 0;
+			res.push(ctx[rnd]);
+		}
+		return res;
+	} else {
+		var rnd = Math.random() * ctx.length | 0;
+		return ctx[rnd];
+	}
+}
+
+//patching functions
 if(!Array.prototype.val){
 	Array.prototype.val = function(value){//returns the position of a given value, or false
-		if (this.indexOf(value) !== -1){
-			return this.indexOf(value);
-		} else {
-			return false;
-		}
+		return Sapphire.val(this);
 	};
 }
 
 if(!Array.prototype.shuffle){
 	Object.defineProperty(Array.prototype, "shuffle", {//shuffles a given array
 		get: function(){
-			for (var i = 0; i < this.length; i++) {
-				var e = this[i];
-				this.splice(i, 1);
-				var rnd = Math.random() * this.length | 0;
-				this.splice(rnd, 0, e);
-			}
-			return this;
+			return Sapphire.shuffle(this);
 		}
 	});
 }
@@ -38,33 +118,13 @@ if(!Array.prototype.shuffle){
 //.delete(d) -> deletes all items equal to d and returns a new array
 if (!Array.prototype.delete){
 	Array.prototype.delete = function(d){
-		var newarray = this;
-		function check(){
-			if (newarray.indexOf(d) !== -1 ){
-				newarray = newarray.remove(newarray.indexOf(d));
-				check();
-			} else {
-				return newarray;
-			}
-		}
+		return Sapphire.delete(this, d);
 	};
 }
 
 if(!Array.prototype.cycle){
 	Array.prototype.cycle = function(callback, times){//loops over the array either inifinitly or so many [times] calling calback each time
-		if (typeof times !== "undefined") {
-			for (var i = 0; i < times; i++) {
-				for (var k = 0; k < this.length; k++) {
-					return callback(this[k]);
-				}
-			}
-		} else {
-			while(true){
-				for (var i = 0; i < this.length; i++) {
-					return callback(this[i]);
-				}
-			}
-		}
+		return Sapphire.cycle(this, times, callback);
 	};
 }
 
@@ -72,47 +132,20 @@ if(!Array.prototype.cycle){
 if (!Array.prototype.compact) {
 	Object.defineProperty(Array.prototype, "compact", {
 		get: function(){
-			for (var i = 0; i < this.length; i++) {
-				if (this[i] === null || typeof this[i] === "undefined" || this[i] === "undefined"){
-					this.remove(this[i])
-				}
-				return this;
-			}
+			return Sapphire.compact(this);
 		}
 	});
 }
 
 if (!Array.prototype.joins) { //returns a string of all the elements in the array, optionally seperated by [seperator]
 	Object.prototype.joins = function(sep){
-		if (typeof sep !== "undefined") {
-			var string = "";
-			for (var i = 0; i < this.length; i++) {
-				i === this.length - 1 ? string += this[i] : string += this[i] + sep;
-			}
-			return string;
-		} else {
-			var string = "";
-			for (var i = 0; i < this.length; i++) {
-				string += this[i];
-			}
-			return string;
-		}
+		return Sapphire.joins(this, sep)
 	};
 }
 
 if (!Array.prototype.sample) {
 	Array.prototype.sample = function(n){//returns either a random element or [number] random elements in an array
-		if (typeof n !== "undefined") {
-			var res = [];
-			for (var i = 0; i < n; i++) {
-				var rnd = Math.random() * this.length | 0;
-				res.push(this[rnd]);
-			}
-			return res;
-		} else {
-			var rnd = Math.random() * this.length | 0;
-			return this[rnd];
-		}
+		return Sapphire.sample(this, n);
 	};
 }
 /*
@@ -120,34 +153,84 @@ if (!Array.prototype.sample) {
 * Arrays + Objects
 *
 */
+
+//non-patching functions
+Sapphire.each = function(ctx, callback){
+	if (Array.isArray(ctx) || ctx.toString() === "[object HTMLCollection]") {//HTMLCollection uses the same style methods as array
+		for (var i = 0; i < ctx.length; i++) {
+			callback(ctx[i], i);//calls the callback once for each element in the array
+		}
+	} else {
+		for (var i = 0; i < Object.keys(ctx).length; i++) {
+			var k = Object.keys(ctx)[i];//key
+			var v = ctx[Object.keys(ctx)[i]];//value
+			callback(k, v);//calls the callback once for each key. first argument is the key, second argument is the value
+		}
+	}
+	return ctx;
+}
+
+Sapphire.last = function(ctx){
+	if (ctx.toString() === "[object Object]") {
+		var k = Object.keys(ctx);
+		var p = k.length - 1;
+		return ctx[k[p]];
+	} else {
+		var p = ctx.length - 1;
+		return ctx[p];
+	}
+}
+
+Sapphire.first = function(ctx){
+	if (ctx.toString() === "[object Object]") {
+		var k = Object.keys(ctx);
+		return ctx[k[0]];
+	} else {
+		return ctx[0];
+	}
+}
+
+Sapphire.contains = function(ctx){
+	if (ctx.toString() === "[object Object]") {
+		return ctx.hasOwnProperty(search);
+	} else{
+		if (ctx.indexOf(search) !== -1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+Sapphire.empty = function(ctx){
+	if (ctx.toString() === "[object Object]") {
+
+	} else{
+		if (ctx.length === 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+Sapphire.times = function(ctx, callback){
+	for (var i = 0; i < Object.keys(ctx).length; i++) {
+		callback();	
+	}
+}
+
+//patching functions
 if(!Object.prototype.each){
 	Object.prototype.each = function(callback){//iterator for objects or arrays
-		if (Array.isArray(this) || this.toString() === "[object HTMLCollection]") {//HTMLCollection uses the same style methods as array
-			for (var i = 0; i < this.length; i++) {
-				callback(this[i]);//calls the callback once for each element in the array
-			}
-		} else {
-			for (var i = 0; i < Object.keys(this).length; i++) {
-				var k = Object.keys(this)[i];//key
-				var v = this[Object.keys(this)[i]];//value
-				callback(k, v);//calls the callback once for each key. first argument is the key, second argument is the value
-			}
-		}
-		return this;
+		return Sapphire.each(this, callback);
 	};
 }
 
 if(!Object.prototype.last){
 	Object.defineProperty(Object.prototype, "last", {//returns the last value of an object/last element in an array
 		get: function(){
-			if (this.toString() === "[object Object]") {
-				var k = Object.keys(this);
-				var p = k.length - 1;
-				return this[k[p]];
-			} else {
-				var p = this.length - 1;
-				return this[p];
-			}
+			return Sapphire.last(this);
 		}
 	});
 }
@@ -155,51 +238,28 @@ if(!Object.prototype.last){
 if(!Object.prototype.first){
 	Object.defineProperty(Object.prototype, "first", {//returns the first value of an object/first element in an array
 		get: function(){
-			if (this.toString() === "[object Object]") {
-				var k = Object.keys(this);
-				return this[k[0]];
-			} else {
-				return this[0];
-			}
+			return Sapphire.first(this);
 		}
 	});
 }
 
 if(!Object.prototype.contains){
 	Object.prototype.contains = function(search){//checks if objects and arrays contain the search term. returns true/false.
-		if (this.toString() === "[object Object]") {
-			return this.hasOwnProperty(search);
-		} else{
-			if (this.indexOf(search) !== -1) {
-				return true;
-			} else {
-				return false;
-			}
-		}
+		return Sapphire.contains(this);
 	};
 }
 
 if (!Object.prototype.empty){
 	Object.defineProperty(Object.prototype, "empty", {//returns true if array/obj contains nothing
 		get: function(){
-			if (this.toString() === "[object Object]") {
-
-			} else{
-				if (this.length === 0) {
-					return true;
-				} else {
-					return false;
-				}
-			}
+			return Sapphire.empty(this);
 		}
 	});
 }
 
 if (!Object.prototype.times){
 	Object.prototype.times = function(callback){//calls [callback] "num" times
-		for (var i = 0; i < this; i++) {
-			callback();	
-		}
+		return Sapphire.times(this, callback);
 	};
 }
 /*
@@ -224,14 +284,14 @@ if (window) {
 		return document.getElementsByName(e);
 	};
 
-if(!Object.prototype.sleep){
-	window.sleep = function(callback, delay){//wraps setTimeout, and defaults to sleeping in seconds rather than miliseconds.
-		delay = delay * 1000;
-		return window.setTimeout(callback, delay);
-	};
-}
+	if(!Object.prototype.sleep){
+		window.sleep = function(callback, delay){//wraps setTimeout, and defaults to sleeping in seconds rather than miliseconds.
+			delay = delay * 1000;
+			return window.setTimeout(callback, delay);
+		};
+	}
 
-	document.addEventListener("load", function(){
+	document.addEventListener("DOMContentLoaded", function(){
 		//innerHTML and innerText just go together. textContent is cool, but innerText is where it's at.
 		if (typeof document.body.innerText === "undefined") {
 			Object.defineProperty(Node.prototype, "innerText", {
@@ -246,18 +306,29 @@ if(!Object.prototype.sleep){
 * Events
 *
 */
-	//borrowing a little from backbone.js here. .on and .off are just so succinct.
+
+//non-patching
+Sapphire.on = function(ctx, type, callback, capture){
+	ctx.addEventListener(type, callback, capture);
+	return ctx;
+}
+
+Sapphire.off = function(ctx, type, callback, capture){
+	ctx.removeEventListener(type, callback, capture);
+	return ctx;
+}
+
+//patching functions
+//borrowing a little from jquery/backbone here. .on and .off are just so succinct.
 if(!Object.prototype.on){
 	Object.prototype.on = function(type, callback, capture){
-		this.addEventListener(type, callback, capture);
-		return this;
+		return Sapphire.on(this, type, callback, capture);
 	};
 }
 
 if(!Object.prototype.off){
 	Object.prototype.off = function(type, callback, capture){
-		this.removeEventListener(type, callback, capture);
-		return this;
+		return Sapphire.off(this, type, callback, capture);
 	};
 }
 /*
@@ -265,29 +336,72 @@ if(!Object.prototype.off){
 * Numbers
 *
 */
+
+//non-patching
+Sapphire.even = function(ctx){
+	if (Number(ctx).valueOf() % 2 === 0 || -0){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+Sapphire.odd = function(ctx){
+	if (Number(ctx).valueOf() % 2 === 0 || -0){
+		return false;
+	} else {
+		return true;
+	}
+}
+
+Sapphire.next = function(ctx){
+	return Number(ctx) + 1;
+}
+
+Sapphire.round = function(ctx){
+	return ctx | 0;
+}
+
+//patching functions
 if(!Object.prototype.even){
 	Object.defineProperty(Object.prototype, "even", {//returns true if a given number is even
 		get: function(){
-			if (Number(this).valueOf() % 2 === 0 || -0){
-				return true;
-			} else {
-				return false;
-			}
+			return Sapphire.even(this);
 		}
 	});
 }
 
-//.odd -> returns true if odd
+if(!Object.prototype.odd){
+	Object.defineProperty(Object.prototype, "odd", {//returns true if a given number is odd
+		get: function(){
+			return Sapphire.odd(this);
+		}
+	});
+}
 
-//.next -> returns number++
+if(!Object.prototype.next){
+	Object.defineProperty(Object.prototype, "next", {//returns number++
+		get: function(){
+			return Sapphire.next(this);
+		}
+	});
+}
 
-//.round -> basically Math.floor. rounds a decimal to a whole
+if(!Object.prototype.round){
+	Object.defineProperty(Object.prototype, "round", {//basically Math.floor. rounds a decimal to a whole
+		get: function(){
+			return Sapphire.round(this);
+		}
+	});
+}
 /*
 *
 * Objects
 *
 */
-Sapphire.o_findkv = function(ctx, value, ret_true){//reduce duplication. takes a ctx(this) the value, and weather to return true or simply the value
+
+//non patching functions
+Sapphire.key = function(ctx, value, ret_true){//returns the key for a given value
 	for (var i = 0; i < Object.keys(ctx).length; i++) {
 		var k = Object.keys(ctx)[i];//key
 		var v = ctx[Object.keys(ctx)[i]];//value
@@ -302,27 +416,44 @@ Sapphire.o_findkv = function(ctx, value, ret_true){//reduce duplication. takes a
 	return false;
 };
 
+Sapphire.val = function(ctx, value){//returns true if there exists a given value
+	return Sapphire.key(ctx, value, true);
+}
+
+Sapphire.values = function(ctx){
+	var array = [];
+	for (var i = 0; i < Object.keys(ctx).length; i++) {//returns an array of the objects values
+		var v = ctx[Object.keys(ctx)[i]];
+		array.push(v);
+	}
+	return array;
+}
+
+Sapphire.parse = function(ctx){//wrapper for the standard JSON.parse
+	return JSON.parse(ctx);
+}
+
+Sapphire.merge = function(ctx, objs){
+	
+}
+
+//patching functions
 if(!Object.prototype.key){
 	Object.prototype.key = function(val){//returns the key for a given value
-		return Sapphire.o_findkv(this, val, false);
+		return Sapphire.key(this, val);
 	};
 }
 
 if(!Object.prototype.val){
 	Object.prototype.val = function(val){//returns true if there exists a given value
-		return Sapphire.o_findkv(this, val, true);
+		return Sapphire.val(this, val);
 	};
 }
 
 if(!Object.prototype.values){
 	Object.defineProperty(Object.prototype, "values", {//returns an array of the objects values
 		get: function(){
-			var array = [];
-			for (var i = 0; i < Object.keys(this).length; i++) {
-				var v = this[Object.keys(this)[i]];
-				array.push(v);
-			}
-			return array;
+			return Sapphire.values(this);
 		}
 	});
 }
@@ -330,27 +461,62 @@ if(!Object.prototype.values){
 if(!Object.prototype.parse){
 	Object.defineProperty(Object.prototype, "parse", { //wrapper for the standard JSON.parse
 		get: function(){
-			return JSON.parse(this);
+			return Sapphire.parse(this);
 		}
 	});
 }
 
 //.merge([objects]) -> merges objects into the main object preffering the originals values when a conflict occurs
+if(!Object.prototype.merge){
+	Object.prototype.merge = function(objs){
+		return Sapphire.merge(this, objs)
+	}
+}
 /*
 *
 * Strings 
 *
 */
+
+//non-patching
+Sapphire.match = function(ctx){
+	return str.match(ctx);
+}
+
+Sapphire.lowercase = function(ctx){
+	return ctx.toLowerCase();
+}
+
+Sapphire.uppercase = function(ctx){
+	return ctx.toUpperCase();
+}
+
+Sapphire.capitalize = function(ctx){
+	var str = ctx.toLowerCase();
+	str = str.split("");
+	str[0] = str[0].toUpperCase();
+	str = S.joins(str);
+	return str;
+}
+
+Sapphire.eachs = function(ctx, callback){
+	var letters = ctx.split("");
+	for (var i = 0; i < letters.length; i++) {
+		callback(letters[i]);
+	}
+}
+
+//patching functions
 if(!Object.prototype.match){
 	Object.prototype.match = function (str) {//flips the standard match object around, the standard match object is not overwritten as it inherets from String, not Object.
-		return str.match(this);
+		return Sapphire.match(this);
 	};
 }
 
 if (!String.prototype.lowercase) {
 	Object.defineProperty(String.prototype, "lowercase", {//converts all chacters to lowercase
 		get: function(){
-			return this.toLowerCase();
+			return Sapphire.lowercase(this);	
 		}
 	});
 }
@@ -358,28 +524,24 @@ if (!String.prototype.lowercase) {
 if (!String.prototype.uppercase) {
 	Object.defineProperty(String.prototype, "uppercase", {//converts all chacters to uppercase
 		get: function(){
-			return this.toUpperCase();
+			return Sapphire.uppercase(this);
 		}
 	});
 }
 
-//.capitalize -> convertes the first character to upper case, and the remainder to lower case
 if (!String.prototype.capitalize) {
-	Object.defineProperty(String.prototype, "capitalize", {//converts all chacters to uppercase
+	Object.defineProperty(String.prototype, "capitalize", {//convertes the first character to upper case, and the remainder to lower case
 		get: function(){
-			var str = this.split("");
-			str[0] = str[0].toUpperCase();
-			str = str.joins();
-			return str;
+			return Sapphire.capitalize(this);
 		}
 	});
 }
 //.swapcase -> converts uppercase to lowercase and lowercase to uppercase
 //if([A-Z]) str[i].toupper if([a-z])str[i].tolower
 
-//.each([callback])/.each_char([callback])? -> calls callback for every chacter
-
-//.each_line?
-
-//.contains
+if (!String.prototype.eachs) {
+	String.prototype.eachs = function(callback){//calls callback for every chacter and includes the character as the first argument
+		return Sapphire.eachs(this, callback);
+	}
+}
 
