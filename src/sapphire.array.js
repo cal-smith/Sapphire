@@ -24,15 +24,15 @@ Sapphire.shuffle = function(ctx){
 }
 
 Sapphire.delete = function(ctx, d){
-	var newarray = this;
-	function check(){
+	function check(newarray){
 		if (newarray.indexOf(d) !== -1 ){
-			newarray = newarray.remove(newarray.indexOf(d));
-			check();
+			newarray.splice(newarray.indexOf(d), 1)
+			check(newarray);
 		} else {
 			return newarray;
 		}
 	}
+	check(ctx);
 }
 
 Sapphire.cycle = function(ctx, times, callback){
@@ -54,7 +54,7 @@ Sapphire.cycle = function(ctx, times, callback){
 Sapphire.compact = function(ctx){
 	for (var i = 0; i < ctx.length; i++) {
 		if (ctx[i] === null || typeof ctx[i] === "undefined" || ctx[i] === "undefined"){
-			ctx.remove(ctx[i])
+			ctx.splice(ctx[i], 1)
 		}
 		return ctx;
 	}
@@ -105,8 +105,7 @@ if(!Array.prototype.shuffle){
 	});
 }
 
-//.delete(d) -> deletes all items equal to d and returns a new array
-if (!Array.prototype.delete){
+if (!Array.prototype.delete){//.delete(d) -> deletes all items equal to d and returns a new array
 	Array.prototype.delete = function(d){
 		return Sapphire.delete(this, d);
 	};
@@ -118,8 +117,8 @@ if(!Array.prototype.cycle){
 	};
 }
 
-//.compact -> removes any null/undefined values
-if (!Array.prototype.compact) {
+
+if (!Array.prototype.compact) {//.compact -> removes any null/undefined values
 	Object.defineProperty(Array.prototype, "compact", {
 		get: function(){
 			return Sapphire.compact(this);
