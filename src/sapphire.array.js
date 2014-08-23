@@ -53,27 +53,11 @@ Sapphire.cycle = function(ctx, times, callback){
 
 Sapphire.compact = function(ctx){
 	for (var i = 0; i < ctx.length; i++) {
-		if (ctx[i] === null || typeof ctx[i] === "undefined" || ctx[i] === "undefined"){
-			ctx.splice(ctx[i], 1)
+		if (ctx[i] === null || ctx[i] === ""){
+			ctx.splice(i, 1)
 		}
-		return ctx;
 	}
-}
-
-Sapphire.joins = function(ctx, sep){
-	if (typeof sep !== "undefined") {
-		var string = "";
-		for (var i = 0; i < ctx.length; i++) {
-			i === ctx.length - 1 ? string += ctx[i] : string += ctx[i] + sep;
-		}
-		return string;
-	} else {
-		var string = "";
-		for (var i = 0; i < ctx.length; i++) {
-			string += ctx[i];
-		}
-		return string;
-	}
+	return ctx;
 }
 
 Sapphire.sample = function(ctx, n){
@@ -124,12 +108,6 @@ if (!Array.prototype.compact) {//.compact -> removes any null/undefined values
 			return Sapphire.compact(this);
 		}
 	});
-}
-
-if (!Array.prototype.joins) { //returns a string of all the elements in the array, optionally seperated by [seperator]
-	Object.prototype.joins = function(sep){
-		return Sapphire.joins(this, sep)
-	};
 }
 
 if (!Array.prototype.sample) {

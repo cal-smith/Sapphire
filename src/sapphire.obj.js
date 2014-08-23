@@ -37,8 +37,16 @@ Sapphire.parse = function(ctx){//wrapper for the standard JSON.parse
 	return JSON.parse(ctx);
 }
 
-Sapphire.merge = function(ctx, objs){
+Sapphire.stringify = function(ctx){
 	
+}
+
+Sapphire.format = function(ctx){
+
+}
+
+Sapphire.merge = function(ctx, objs){
+
 }
 
 //patching functions
@@ -68,6 +76,15 @@ if(!Object.prototype.parse){
 			return Sapphire.parse(this);
 		}
 	});
+}
+
+if (!Object.prototype.stringify) {
+	//wapper for JSON.stringify
+
+}
+
+if (!Object.prototype.format) {
+	//pretty prints JSON
 }
 
 //.merge([objects]) -> merges objects into the main object preffering the originals values when a conflict occurs

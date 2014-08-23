@@ -7,10 +7,15 @@ Like Ruby, but blue
 
 Because Javascript could learn a thing or two from Ruby.
 
+###Monkey patching?
+
+Not really. By default everything is namespaced under `Sapphire` (aliased as `S`), and functions are patched in via the same method as polyfills. Incompatibilitys between verions of this library should never be a problem, with new versions only adding what old ones are missing, And Sapphire will simply get out of the way of third party, or pre-defined functions with the same name.
+
 ##Usage
 
-Just drop sapphire.js in your document  
-`<script type="text/javascript" src="sapphire.js"></script>`
+Just drop sapphire.js or sapphire.min.js in your document  
+`<script type="text/javascript" src="sapphire.js"></script>`  
+`<script type="text/javascript" src="sapphire.min.js"></script>`
 
 Planned:
 - [x] Implement a build system
@@ -56,25 +61,43 @@ Gets the first element from an array or object.
 
 Returns true if the search value is found in the array/obj. False if not.
 
+####.empty
+
+`obj/array.empty`
+
+Returns true if the obj/array is empty. False if not.
+
+####.times()
+
+`obj/array.times(callback())`
+
+Calls callback once for each element in the obj/array. Callback recives no arguments. For iteration see `.each()`
+
 ###Object
 
 ####.key()
 
 `obj.key(val)`
 
-returns the key for a given value, or false.
+Returns the key for a given value, or false.
 
 ####.val()
 
 `obj.val(val)`
 
-returns true if there exists a given value, or false.
+Returns true if there exists a given value, or false.
 
 ####.values
 
 `obj.values`
 
-returns an array containing the objects values.
+Returns an array containing the objects values.
+
+####.parse
+
+`JSON-obj.parse`
+
+Wrapper around the default `JSON.parse(json)`. Returns JS obj.
 
 ###Array
 
@@ -90,19 +113,99 @@ returns the position of a given value, or false.
 
 shuffles the array and returns the shuffled array.
 
+####.delete(element)
+
+`array.delete(element)`
+
+Deletes all items equal to `element` and returns a new array.
+
+####.cycle
+
+`array.cycle(callback(k), times)`
+
+Iterates the array inifinitely or `times` amount, and calls `callback(k)` each time. Callback recives the element as an argument.
+
+####.compact
+
+`array.compact`
+
+Attempts to remove and null or blank values from the array. Returns a new compacted array.
+
+####.sample
+
+`array.sample(n)`
+
+Returns either a random element from the array, or `n` random elements from the array in a new array.
+
+###Strings
+
+####.match
+
+`/regex/.match("string")`
+
+Flips the standard `.match()` function around.
+
+####.lowercase
+
+`"string".lowercase`
+
+Wrapper for `"string".toLowerCase()`. Returns a string in lower case.
+
+####.uppercase
+
+Wrapper for `"string".toUpperCase()`. Returns a string in upper case.
+
+####.capitalize
+
+`"string".capitalize`
+
+Returns a string with the first letter capitalized, and the rest in lower case.
+
+####.eachs
+
+`"string".eachs(callback(l))`
+
+String specific variant of `.each()`. Iterates over each character calling callback. Callback recives the letter as an argument
+
+###Numbers
+
+####.even
+
+`number.even`
+
+Returns true if a number is even.
+
+####.odd
+
+`number.odd`
+
+Returns true if a number is odd.
+
+####.next
+
+`number.next`
+
+Returns the next number.
+
+####.round
+
+`number.round`
+
+Rounds the number to a whole, Math.floor() style, not Math.max() style.
+
 ###Event
 
 ####.on()
 
 `target.on(type, callback, [userCapture])`
 
-effectively a 1-1 mapping for addEventListener.
+Wrapper for `target.addEventListener()`
 
 ####.off()
 
 `target.off(type, callback, [userCapture])`
 
-effectively a 1-1 mapping for removeEventListener.
+Wrapper for `target.removeEventListener()`
 
 ###Window/Browser specific methods
 
@@ -110,16 +213,16 @@ effectively a 1-1 mapping for removeEventListener.
 
 Various shorthand for common element selectors.
 
-`.e("element")/.i("element")`  
+`.e("id")/.i("id")`  
 Shorthand for getElementById. Returns a single element.
 
-`.c("element")`  
+`.c("class")`  
 Shorthand for getElementsByClassName. Returns an array of elements.
 
-`.t("element")`  
+`.t("tag")`  
 Shorthand for getElementsByTagName. Returns an array of elements.
 
-`.n("element")`
+`.n("name")`
 Shorthand for getElementsByName. Returns an array of elements.
 
 ####sleep()

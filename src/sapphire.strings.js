@@ -5,7 +5,7 @@
 */
 
 //non-patching
-Sapphire.match = function(ctx){
+Sapphire.match = function(ctx, str){
 	return str.match(ctx);
 }
 
@@ -21,7 +21,7 @@ Sapphire.capitalize = function(ctx){
 	var str = ctx.toLowerCase();
 	str = str.split("");
 	str[0] = str[0].toUpperCase();
-	str = S.joins(str);
+	str = str.join("");
 	return str;
 }
 
@@ -35,7 +35,7 @@ Sapphire.eachs = function(ctx, callback){
 //patching functions
 if(!Object.prototype.match){
 	Object.prototype.match = function (str) {//flips the standard match object around, the standard match object is not overwritten as it inherets from String, not Object.
-		return Sapphire.match(this);
+		return Sapphire.match(this, str);
 	};
 }
 

@@ -63,27 +63,11 @@ Sapphire.cycle = function(ctx, times, callback){
 
 Sapphire.compact = function(ctx){
 	for (var i = 0; i < ctx.length; i++) {
-		if (ctx[i] === null || typeof ctx[i] === "undefined" || ctx[i] === "undefined"){
-			ctx.splice(ctx[i], 1)
+		if (ctx[i] === null || ctx[i] === ""){
+			ctx.splice(i, 1)
 		}
-		return ctx;
 	}
-}
-
-Sapphire.joins = function(ctx, sep){
-	if (typeof sep !== "undefined") {
-		var string = "";
-		for (var i = 0; i < ctx.length; i++) {
-			i === ctx.length - 1 ? string += ctx[i] : string += ctx[i] + sep;
-		}
-		return string;
-	} else {
-		var string = "";
-		for (var i = 0; i < ctx.length; i++) {
-			string += ctx[i];
-		}
-		return string;
-	}
+	return ctx;
 }
 
 Sapphire.sample = function(ctx, n){
@@ -134,12 +118,6 @@ if (!Array.prototype.compact) {//.compact -> removes any null/undefined values
 			return Sapphire.compact(this);
 		}
 	});
-}
-
-if (!Array.prototype.joins) { //returns a string of all the elements in the array, optionally seperated by [seperator]
-	Object.prototype.joins = function(sep){
-		return Sapphire.joins(this, sep)
-	};
 }
 
 if (!Array.prototype.sample) {
@@ -432,8 +410,16 @@ Sapphire.parse = function(ctx){//wrapper for the standard JSON.parse
 	return JSON.parse(ctx);
 }
 
-Sapphire.merge = function(ctx, objs){
+Sapphire.stringify = function(ctx){
 	
+}
+
+Sapphire.format = function(ctx){
+
+}
+
+Sapphire.merge = function(ctx, objs){
+
 }
 
 //patching functions
@@ -465,6 +451,15 @@ if(!Object.prototype.parse){
 	});
 }
 
+if (!Object.prototype.stringify) {
+	//wapper for JSON.stringify
+
+}
+
+if (!Object.prototype.format) {
+	//pretty prints JSON
+}
+
 //.merge([objects]) -> merges objects into the main object preffering the originals values when a conflict occurs
 if(!Object.prototype.merge){
 	Object.prototype.merge = function(objs){
@@ -478,7 +473,7 @@ if(!Object.prototype.merge){
 */
 
 //non-patching
-Sapphire.match = function(ctx){
+Sapphire.match = function(ctx, str){
 	return str.match(ctx);
 }
 
@@ -494,7 +489,7 @@ Sapphire.capitalize = function(ctx){
 	var str = ctx.toLowerCase();
 	str = str.split("");
 	str[0] = str[0].toUpperCase();
-	str = S.joins(str);
+	str = str.join("");
 	return str;
 }
 
@@ -508,7 +503,7 @@ Sapphire.eachs = function(ctx, callback){
 //patching functions
 if(!Object.prototype.match){
 	Object.prototype.match = function (str) {//flips the standard match object around, the standard match object is not overwritten as it inherets from String, not Object.
-		return Sapphire.match(this);
+		return Sapphire.match(this, str);
 	};
 }
 
